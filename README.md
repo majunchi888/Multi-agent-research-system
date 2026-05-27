@@ -39,11 +39,6 @@ http://127.0.0.1:8000/docs 查看 API 文档。
 第 8 步 — Docker 部署
 将 FastAPI 后端 + Streamlit 前端打包成一个 Docker 镜像，实现一键部署、环境一致性和生产级运行能力。Docker 部署可以解决本地环境差异、依赖冲突、端口管理等问题，适合将整个 Multi-Agent Research 系统部署到服务器、云平台（阿里云、腾讯云、Railway、Render 等）或内网服务器。
 
-💡 术语补充（LangChain 项目）
-shared state dictionary 共享状态字典：多 Agent 协作的核心，全程保存所有任务数据、搜索结果、原文内容、生成报告、评审反馈，全流程共用一份数据
-message-based 消息式 IO：LangChain REACT Agent 标准交互格式，用对话消息数组传递所有上下文
-result["messages"][-1].content：取对话历史里最新一条消息的文本内容
-
 问题： 1. 很多网站拒绝抓取 1. 页面提示需要启用JavaScript才能运行应用，说明该页面是动态渲染的，当前工具无法解析其内容。
 原因：
 你现在的 requests + BeautifulSoup 或 Tavily 默认抓取方式
