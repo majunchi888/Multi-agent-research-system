@@ -32,20 +32,26 @@ http://127.0.0.1:8000/docs 查看 API 文档。
 第 7 步 — 创建ui.py
 使用 Streamlit 构建 AI Research 前端界面。用户输入研究主题后，Streamlit 会通过 HTTP 请求调用 FastAPI 后端，并实时接收 Streaming 返回的 Agent 执行结果，包括搜索状态、网页内容、最终报告以及 Critic Feedback，实现类似 ChatGPT / Deep Research 的实时交互体验。
 
+第 8 步 — Docker 部署
+将 FastAPI 后端 + Streamlit 前端打包成一个 Docker 镜像，实现一键部署、环境一致性和生产级运行能力。Docker 部署可以解决本地环境差异、依赖冲突、端口管理等问题，适合将整个 Multi-Agent Research 系统部署到服务器、云平台（阿里云、腾讯云、Railway、Render 等）或内网服务器。
+
 💡 术语补充（LangChain 项目）
 shared state dictionary 共享状态字典：多 Agent 协作的核心，全程保存所有任务数据、搜索结果、原文内容、生成报告、评审反馈，全流程共用一份数据
 message-based 消息式 IO：LangChain REACT Agent 标准交互格式，用对话消息数组传递所有上下文
 result["messages"][-1].content：取对话历史里最新一条消息的文本内容
 
-问题： 1. 很多网站拒绝抓取 例如：1. **Pantone官网（https://www.pantone.com/hk/tc/fashion-color-trend-report）**：页面提示需要启用JavaScript才能运行应用，说明该页面是动态渲染的，当前工具无法解析其内容。2. **iaseshop.com（https://www.iaseshop.com/en/pages.php?pageid=55）**：页面显示为加载中状态，且内容主要是导航和产品目录，未包含具体的2025春夏流行色趋势报告正文。
-
+问题： 1. 很多网站拒绝抓取 1. 页面提示需要启用JavaScript才能运行应用，说明该页面是动态渲染的，当前工具无法解析其内容。
 原因：
 你现在的 requests + BeautifulSoup 或 Tavily 默认抓取方式
 只能拿到「初始 HTML」
-
-方法1： 换Playwright（最推荐）自动执行 JS；等页面加载；再获取 HTML；
+方法：
+换Playwright（最推荐）自动执行 JS；等页面加载；再获取 HTML；
 搜索多个url，选取最相关的可爬取的url
 
 问题2： 搜索到的网站都是2024年的
+方法： 给Tavily工具增加搜索时间段的参数；agent提示词修改：对工具搜索到的内容进行翻译，不让其随意加工。
 
-方法2： 给Tavily工具增加搜索时间段的参数；agent提示词修改：对工具搜索到的内容进行翻译，不让其随意加工。
+问题3： FastAPI 后端只有在整个 Agent 执行流程全部完成后，才会一次性将全部结果返回给前端，没有实现后端输出一点，前端显示一点
+方法：使用 FastAPI 的 StreamingResponse 结合 Server-Sent Events (SSE) 实现流式输出。
+修改返回方式：将原来的 return 改为 yield 生成器形式。
+使用 StreamingResponse 返回 SSE 数据流。Streamlit接收方式改为requests + iter_content 处理流式数据。
