@@ -1,10 +1,14 @@
 from agents import build_search_agent, build_reader_agent, writer_chain, critic_chain 
+import json
 
-def run_research_pipeline(topic: str) -> dict: # type: ignore
+def run_research_pipeline_stream(topic: str) : # type: ignore
   state = {}
 
   #search agent working
-  print("\n"+"="*40+"Step 1: SEARCH AGENT WORKING"+"="*40+"\n")
+  yield f"data: {json.dumps({
+    'type': 'status',
+    'content': '🔍 Search Agent working...'
+  }, ensure_ascii=False)}\n\n"
 
   search_agent = build_search_agent()
   search_result = search_agent.invoke({
@@ -12,10 +16,16 @@ def run_research_pipeline(topic: str) -> dict: # type: ignore
     }) # type: ignore
   state["search_results"] = search_result["messages"][-1].content # type: ignore
 
-  print("\nsearch results: ", state["search_results"])
+  yield f"data: {json.dumps({
+    'type': 'search',
+    'content': state['search_results']
+  }, ensure_ascii=False)}\n\n"
 
   # step 2 - reader agent
-  print("\n"+"="*40+"Step 2: READER AGENT is srcrapping..."+"="*40+"\n")
+  yield f"data: {json.dumps({
+    'type': 'status',
+    'content': '📖 Reader Agent working...'
+  }, ensure_ascii=False)}\n\n"
   
   reader_agent = build_reader_agent()
   read_result = reader_agent.invoke({
@@ -27,10 +37,16 @@ def run_research_pipeline(topic: str) -> dict: # type: ignore
   
   state["scraped_content"] = read_result["messages"][-1].content
 
-  print("\nscraped content:\n", state["scraped_content"])
+  yield f"data: {json.dumps({
+    'type': 'reader',
+    'content': state['scraped_content']
+  }, ensure_ascii=False)}\n\n"
 
   # step 3 - writer chain
-  print("\n"+"="*40+"Step 3: Writer is drafting the report..."+"="*40+"\n")
+  yield f"data: {json.dumps({
+    'type': 'status',
+    'content': '✍ Writer working...'
+  },ensure_ascii=False)}\n\n"
 
   research_combined = (
      f"SEARCH RESULTS:\n{state['search_results']}\n\n"
@@ -42,20 +58,27 @@ def run_research_pipeline(topic: str) -> dict: # type: ignore
     "research": research_combined
   })
 
-  print("\n"+"="*40+"Final Report"+"="*40+"\n")
-  print(state["report"])
+  yield f"data: {json.dumps({
+    'type': 'report',
+    'content': state['report']
+  }, ensure_ascii=False)}\n\n"
 
   # step 4 - critic chain
-  print("\n"+"="*40+"Step 4: Critic is evaluating the report..."+"="*40+"\n")
+  yield f"data: {json.dumps({
+    'type': 'status',
+    'content': '🧠 Critic working...'
+  }, ensure_ascii=False)}\n\n"
   
   state["feedback"] =  critic_chain.invoke({
     "report": state["report"]
   })
 
-  print("\n"+"="*40+"Critic's Feedback on Report"+"="*40+"\n")
-  print(state["feedback"])  
+  yield f"data: {json.dumps({
+    'type': 'feedback',
+    'content': state['feedback']
+  }, ensure_ascii=False)}\n\n"
 
-  return state
+  yield "data: [DONE]\n\n"
 
 # if __name__ == "__main__":
 #   topic = input("\n请输入你想要搜寻的主题：")
