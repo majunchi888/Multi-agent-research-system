@@ -1,11 +1,18 @@
 # 演示图片
 
 <details>
-<summary>查看完整系统截图</summary>
+  <summary>
+    <b style="font-size:20px; font-weight:bold; color:#409EFF;">📸 查看完整系统截图</b>
+  </summary>
 
-<img src="images/Multi-Agent research System.png"/>
+  <br>
+
+  <p align="center">
+    <img src="images/Multi-Agent research System.png" width="700"/>
+  </p>
 
 </details>
+
 ## 创作流程
 
 ### 第 1 步 — 环境搭建
