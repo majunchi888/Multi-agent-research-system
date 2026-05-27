@@ -1,8 +1,12 @@
+# Multi-Agent Research System
+
+一个多智能体搜索研究系统，能够自动搜索、爬取、分析和生成研究报告并进行评价。<br>
+
 # 演示图片
 
 <details open>
   <summary>
-    <b style="font-size:20px; font-weight:bold; color:#409EFF;">📸 查看完整系统截图</b>
+    <b style="font-size:30px; font-weight:bold">📸 查看完整系统截图（点击展开 / 收起）</b>
   </summary>
 
   <br>
