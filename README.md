@@ -1,3 +1,7 @@
+![alt text](<images/Multi-Agent research System.png>)
+
+### 创作流程
+
 第 1 步 — 环境搭建 创建一个虚拟环境(uv venv)，安装需要的库从requirements.txt中，创建.env文件存入llm的api key和base url 和工具Tavily API key.
 
 第 2 步 — 创建 tools.py
