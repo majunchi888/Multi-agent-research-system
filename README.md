@@ -12,7 +12,7 @@
   <br>
 
   <p align="center">
-    <img src="images/Multi-Agent research System.png" width="300"/>
+    <img src="images/Multi-Agent research System.png" width="700"/>
   </p>
 
 </details>
