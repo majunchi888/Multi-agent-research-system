@@ -1,6 +1,6 @@
 # 演示图片
 
-<details>
+<details open>
   <summary>
     <b style="font-size:20px; font-weight:bold; color:#409EFF;">📸 查看完整系统截图</b>
   </summary>
