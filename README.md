@@ -1,11 +1,11 @@
 # 演示图片
 
-<p align="center">
-  <a href="images/Multi-Agent research System.png">
-    <img src="images/Multi-Agent research System.png" width="700"/>
-  </a>
-</p>
+<details>
+<summary>查看完整系统截图</summary>
 
+<img src="images/Multi-Agent research System.png"/>
+
+</details>
 ## 创作流程
 
 ### 第 1 步 — 环境搭建
