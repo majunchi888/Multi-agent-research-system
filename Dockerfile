@@ -6,6 +6,11 @@ WORKDIR /app
 #把宿主机当前目录的所有文件复制到容器内的 /app 目录。
 COPY . /app
 
+# 绕过代理设置
+ENV NO_PROXY="dashscope.aliyuncs.com,*.aliyuncs.com,localhost,127.0.0.1"
+ENV no_proxy="dashscope.aliyuncs.com,*.aliyuncs.com,localhost,127.0.0.1"
+ENV PYTHONUNBUFFERED=1
+
 # 赋予 start.sh 执行权限
 RUN chmod +x start.sh
 
@@ -20,6 +25,13 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
 #     安装 Python 依赖包
 # --no-cache-dir：不缓存 pip 安装包，进一步减小镜像体积
 RUN pip install --no-cache-dir -r requirements.txt
+
+# 安装 Playwright
+RUN pip install playwright
+
+# 安装浏览器
+RUN playwright install --with-deps chromium
+
 
 EXPOSE 8000
 EXPOSE 8501
